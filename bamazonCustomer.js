@@ -1,6 +1,9 @@
+//dependency for MySql
 var mysql = require("mysql");
+//dependency for prompting questions in node
 var inquirer = require("inquirer");
 
+//connect to the database
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -10,11 +13,14 @@ var connection = mysql.createConnection({
   password: "password1",
   database: "BamazonDB"
 });
+
+//connection status
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
 });
 
+//print each item in the table with the id, product name, department name, price, and quantity in stock
 connection.query("SELECT * FROM products", function(err, res) {
   for (var i = 0; i < res.length; i++) {
     console.log(res[i].id + " | " + res[i].product_name + " | " 
@@ -24,7 +30,7 @@ connection.query("SELECT * FROM products", function(err, res) {
   buy();
 });
 
-
+//function to buy items from Bamazon
 var buy = function() {
   inquirer.prompt([
   {
@@ -50,14 +56,16 @@ var buy = function() {
     }
 
   }]).then(function(answer) {
-    // based on their answer, either call the bid or the post functions
+    // checks the database
     	var ItemID = parseInt(answer.units);
     		connection.query("SELECT * FROM products WHERE ?", [{id: answer.productID}], function(err, data) {
+  				//check stock quantity
   				if (err) throw err;
   				if (data[0].stock_quantity < ItemID) {
   					console.log("Insufficent Quantity!");
   					buy();
   				} else {
+  					//if quantity is sufficent for the order, give total and update stock
   					var updateUnits = data[0].stock_quantity - ItemID;
   					var totalCost = data[0].price * ItemID;
   					connection.query('UPDATE products SET stock_quantity = ? WHERE id = ?', [updateUnits, answer.productID], function(err, results) {
