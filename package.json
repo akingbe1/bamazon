@@ -1,0 +1,23 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "bamazon homework",
+  "main": "bamazonCustomer.js",
+  "dependencies": {
+    "inquirer": "^3.0.6",
+    "mysql": "^2.13.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "bamazon"
+  },
+  "keywords": [
+    "bamazon"
+  ],
+  "author": "Benga Akingbe",
+  "license": "ISC"
+}
